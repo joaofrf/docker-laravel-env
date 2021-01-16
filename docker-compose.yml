@@ -1,0 +1,50 @@
+version: '3'
+networks:
+  laravel:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "8088:80" #redirecionei 80 para 8088 porque tinha a 80 ocupada...
+    volumes: #volumes (espécie de symbolic link)
+      - ./src:/var/www/html #pasta src local para a /var/www/html do nginx
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf #alterar a config do nginx para laravel
+    depends_on: #só arranjar depois das dependencias
+      - php
+      - mysql
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql #volume para os dados da bd serem guardados
+    environment: #defenir variaveis de ambiente.... (usei as do homestead porque estou habituado a usar homestead + vagrant)
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile #php não utilizo image porque preciso do pdo para laravel
+    container_name: php
+    volumes:
+      - ./src:/var/www/html #meto também aqui o mesmo volume do nginx para que o php o corra.
+    ports:
+     - "9000:9000"
+    networks:
+      - laravel
+

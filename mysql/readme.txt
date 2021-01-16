@@ -1,0 +1,1 @@
+Esta pasta tem que existir e vai ser preenchida quando a bd for utilizada.
