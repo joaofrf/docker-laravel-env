@@ -26,7 +26,7 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql:/var/lib/mysql #volume para os dados da bd serem guardados
-    environment: #defenir variaveis de ambiente.... (usei as do homestead porque estou habituado a usar homestead + vagrant)
+    environment: #definir variáveis de ambiente.... (usei as do homestead porque estou habituado a usar homestead + vagrant)
       MYSQL_DATABASE: homestead
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
